@@ -16,7 +16,7 @@
 
 #define PIC_PIT		0x0
 #define PIC_KB		0x1
-#define PIC_CASC	0x2 //NEVER RAISED.
+#define PIC_CASC	0x2	//NEVER RAISED.
 #define PIC_COM2	0x3
 #define PIC_COM1	0x4
 #define PIC_LPT2	0x5
@@ -29,7 +29,7 @@
 #define PIC_MOUS	0xB
 #define PIC_COPR	0xC
 #define PIC_FPU		0xC
-#define PIC_pATA	0xD //Primary, not parallel
+#define PIC_pATA	0xD	//Primary, not parallel
 #define PIC_sATA	0xE	//Secondary, not serial
 
 void PIC_set_mask(uint8_t);

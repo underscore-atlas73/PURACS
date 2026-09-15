@@ -1,6 +1,6 @@
 #include <PURACS/chrono.h>
 #include <kernel/drivers/pit.h>
-#include <stdio.h>
+//#include <stdio.h>
 
 void ksleep(uint64_t ms) {
     uint64_t target_ticks = sysclock + ms;

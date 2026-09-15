@@ -6,6 +6,7 @@ ENTRY(_start)
 SECTIONS
 {
 	. = 1M;
+	__KERNEL_BIN_START = .;
 
 	.multiboot_header BLOCK(4K) : {
 		*(.multiboot_header)
@@ -27,4 +28,6 @@ SECTIONS
 		*(COMMON)
 		*(.bss)
 	}
+
+	__KERNEL_BIN_END = .;
 }

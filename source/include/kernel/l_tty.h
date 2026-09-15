@@ -8,18 +8,21 @@
 
 #include <kernel/drivers/l_vga.h>
 
-void terminal_init(void);
-void terminal_putchar(char c);
-void terminal_write(const char* data, size_t size);
-void terminal_newline(void);
-#define terminal_writestring(str) (terminal_write(str, strlen(str)))
+typedef struct {
+	size_t		terminal_row;
+	size_t		terminal_column;
+	uint8_t		terminal_color;
+        uint16_t*	terminal_buffer;
+        size_t		buffer_size;
+} Terminal;
 
-struct TerminalData {
-	size_t terminal_row;
-	size_t terminal_column;
-	uint8_t terminal_color;
-	uint16_t* terminal_buffer;
-};
-extern struct TerminalData terminalData;
+extern Terminal terminals[8];
+
+void terminal_init(Terminal* terminal, uint16_t* buffer, size_t buffer_size); //buf size in bytes
+void terminal_putchar(uint8_t streamIndex, char c);
+void terminal_write(uint8_t streamIndex, const char* data, size_t size);
+void terminal_newline(uint8_t streamIndex);
+void terminal_flush(uint8_t streamIndex);
+//#define terminal_writestring(str) (terminal_write(str, strlen(str)))
 
 #endif
