@@ -17,16 +17,16 @@
 #include <stdio.h>
 #include <PURACS/chrono.h>
 
-void kmain(uint32_t magic, uint32_t* mbi) {
+void kmain(uint32_t magic, struct multiboot_info_block* mbi) {
         terminal_init(&terminals[0], (void*)CGA_BUF, 80*25*2);	// Initialize temporary direct debug terminal
-
+  
 	////////////////MULTIBOOT///////////////////
         switch (magic) {
 		case 0x2BADB002:
 			puts("Loaded by Multiboot1 program. This version was built for the Multiboot2 Specification; the kernel will abort.");
                         return;
 		case MULTIBOOT2_BOOTLOADER_MAGIC /*0x36D76289*/:
-			puts("Loaded by Multiboot2 program.");
+			puts("Loaded by Multiboot2 program.\n");
                         break;
 		default:
 			printf("INVALID MAGIC: %X", magic);
@@ -40,7 +40,22 @@ void kmain(uint32_t magic, uint32_t* mbi) {
 		return;
         }
 
-	////////////////////////////////////////////
+        initialize_memBlockBank(tag_mmap);
+        rbm_MultibootInfo.addr = mbi;
+        rbm_MultibootInfo.size = mbi->total_size;
+        rbm_Kernel.addr = (void*)KERNEL_BIN_START;
+        rbm_Kernel.size = KERNEL_BIN_END - KERNEL_BIN_START;
+
+        printf("MemoryBlockBank (Addr: %p ; Length: %i entries):\n",
+		memBlockBank, memBlockBank->length);
+        for (size_t i = 0; i < memBlockBank->length; i++) {
+		printf("\tAddr: %p ; Size: %u bytes ; Type: %i\n", memBlockBank->blocks[i].base_addr, memBlockBank->blocks[i].size, memBlockBank->blocks[i].type);
+        }
+        
+        printf("Reserved Sections:\n");
+        printf("\tAddr: %p ; Size: %u bytes\n", rbm_Kernel.addr, rbm_Kernel.size);
+        printf("\tAddr: %p ; Size: %u bytes\n", rbm_MultibootInfo.addr, rbm_MultibootInfo.size);
+        ////////////////////////////////////////////
 	////////////////INTERRUPTS//////////////////
 	idt_init();
 
@@ -53,8 +68,10 @@ void kmain(uint32_t magic, uint32_t* mbi) {
 	PIC_clear_mask(PIC_PIT);
 	PIC_clear_mask(PIC_KB);
 	sti();
-	////////////////////////////////////////////
-
+        ////////////////////////////////////////////
+        ////////////////MEMORY//////////////////////
+        
+        ////////////////////////////////////////////
 	while (1) {
 	}
 
