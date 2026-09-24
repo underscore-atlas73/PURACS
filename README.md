@@ -16,10 +16,12 @@ PURACS may be referred to as System73, Sys73, SystemLXXIII, or LynXX(III) in som
 - [x] Legacy VGA text-mode Display Driver
 - [x] Legacy 8259 PIC Driver
 - [X] Legacy PIT Sysclock
-- [ ] Legacy PS/2 Keyboard Driver
+- [X] Legacy PS/2 Keyboard Driver (Basic functionality finished)
 - [ ] RTC Driver
 - [ ] Dynamic Memory Allocation (Heap)
 - TODO
+
+- [SCRATCH FILE (MORE FREQUENTLY UPDATED)](.org/main.org) (some formatting may be broken due to Github stripping Emacs Org files)
    
 # Planned Features
  
