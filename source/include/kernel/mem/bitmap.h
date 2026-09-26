@@ -20,11 +20,15 @@ static inline void bitmap_initP(bitmap_t *bmp) {
 }  
 
 static inline void bitmap_set(bitmap_t *bmp, size_t bit_idx) {
-    bmp->data[bit_idx / 32] |= (1U << (bit_idx % 32));
+	bmp->data[bit_idx / 32] |= (1U << (bit_idx % 32));
+}
+
+static inline void bitmap_clear(bitmap_t *bmp, size_t bit_idx) {
+	bmp->data[bit_idx / 32] &= ~(1U << (bit_idx % 32));
 }
 
 static inline uint8_t bitmap_test(const bitmap_t *bmp, size_t bit_idx) {
-    return (bmp->data[bit_idx / 32] & (1U << (bit_idx % 32))) != 0;
+	return (bmp->data[bit_idx / 32] & (1U << (bit_idx % 32))) != 0;
 }
 
 uint8_t bitmap_find_first_free(const bitmap_t *bmp, size_t *out_idx);

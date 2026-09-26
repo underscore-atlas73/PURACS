@@ -44,15 +44,21 @@ void terminal_write(uint8_t streamIndex, const char* data, size_t size) {
 		terminal_putchar(streamIndex, data[i]);
 }
 
+static inline void terminal_scroll(uint8_t streamIndex) {
+	size_t i = 0;;
+	for (; i < terminals[streamIndex].buffer_size - VGA_WIDTH; i++)
+		terminals[streamIndex].terminal_buffer[i] = terminals[streamIndex].terminal_buffer[i + VGA_WIDTH];  
+}
 void terminal_newline(uint8_t streamIndex) {
 	terminals[streamIndex].terminal_column = 0;
 	if (++(terminals[streamIndex].terminal_row) == (terminals[streamIndex].buffer_size / 2) / VGA_WIDTH) {
-		terminals[streamIndex].terminal_row = 0;
-		//TODO: Implement scrolling + buffering. We have enough room between 0xB8000 and 0xBFFFF for 8 screens
+		terminals[streamIndex].terminal_row--;
+		terminal_scroll(streamIndex);
+		//TODO: Implement full scrolling + buffering. We have enough room between 0xB8000 and 0xBFFFF for 8 screens
 	}
 }
 
-void terminal_flush(uint8_t streamIndex) { //unnecessarily slow when streamIndex is already the terminal being displayed. need videocard accelerated BitBLT
+void terminal_flush(uint8_t streamIndex) { //unnecessarily slow when streamIndex is already the terminal being displayed; need videocard accelerated BitBLT. 
 	size_t i;
         for (i = 0; i < VGA_WIDTH * VGA_HEIGHT * 2; i++) {
 		((uint8_t*)VGA_MEMORY)[i] = ((uint8_t*)terminals[streamIndex].terminal_buffer)[i];
