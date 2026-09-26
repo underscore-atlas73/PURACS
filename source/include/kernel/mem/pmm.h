@@ -4,6 +4,9 @@
 #include <multiboot2.h>
 #include <stddef.h>
 #include <stdint.h>
+#include <kernel/mem/bitmap.h>
+
+extern bitmap_t pmmMap;
 
 struct memoryblock {
 	void* base_addr;
@@ -27,6 +30,6 @@ typedef struct ReservedBlock {
 extern ReservedBlockMarker rbm_Kernel;
 extern ReservedBlockMarker rbm_MultibootInfo;
 
-void initialize_memBlockBank(struct multiboot_tag_mmap* tag_mmap);
+void initialize_PMM(struct multiboot_tag_mmap* tag_mmap);
 
 #endif

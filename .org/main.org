@@ -1,3 +1,4 @@
+-*- mode: org -*-
 #+TITLE: Main Org File
 #+DESCRIPTION: The main working-scratch file; touches upon TODO items, abstract (or to-be-implemented) structures; this file will most likely be edited more frequently than the main README.md
 
@@ -5,15 +6,20 @@
 #+TODO: IDEA(i) UNDER_REVIEW(u) | OKAY(o) DENIED(d)
 #+TODO: BUG(b) FIXME(f) | FIXED(f)
 
+* Kernel Boot Environment
+Two boot environments: BIOS & UEFI.
++ BIOS: Standard MBR Bootloader. _TARGET: i386 (LEGACY)_
++ UEFI: ELF Binary               _TARGET: x64_
+
+*Unified Kernel Signature:* TODO
+
 * System API
         + Linux has =<unistd.h>= for POSIX compatibility, =<sys/*.h>= folder for system API
         + Windows has minimal POSIX compatibility, headers such as =<windows.h>= for system API
-
-** TODO [#A] Structure of the PURACS System API  :SPEC_UNFIN:
+** TODO [#A] Structure of the PURACS System API               :SPEC_UNFIN:
   /PURACS System API files will be modules; Located/ \rightarrow ~<PURACS/*.h>~
-
-*** IN-P [#A] Kernel Implementations :SPEC_UNFIN:
-
+  
+*** IN-P [#A] Kernel Implementations                         :SPEC_UNFIN:
 **** IN-P [#A] Chrono :SPEC_UNFIN:
 - [X] Sleep :: ~<PURACS/chrono.h>, sleep(ms)~
 *** TODO [#C] Keycodes

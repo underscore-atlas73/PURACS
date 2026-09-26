@@ -26,7 +26,7 @@ _start:
 
 	# zero out tables (4-level: PML4 -> PDPT -> PD -> PT (-> 4K Page))
 	movl $PML4_TABLE, %edi
-	movl $3072, %ecx #stosl writes 4 byte values, 4 x 3072 = 12288, 3 x 4096 = 12288
+	movl $4096, %ecx #stosl writes 4 byte values, 4 x 4096 = 16384, 4 x 4096 = 16384
 	xorl %eax, %eax
 	rep stosl
 
@@ -40,11 +40,25 @@ _start:
 	orl $0b11, %eax
 	movl %eax, (PAGE_DIRECTORY_POINTER_TABLE)
 
-	# Identity map first 2MiB page
-	movl $0x83, %eax			# Magic value 0x83 = 10000011: P.S. = 1 ; R/W = 1 ; Present = 1
-	movl %eax, PAGE_DIRECTORY(,%ecx, 8)	# displacement(base, index, scale)
-	movl $0, PAGE_DIRECTORY + 4(,%ecx,8)
+	# point PD to PT
+	movl $PAGE_TABLE, %eax
+	orl  $0b11, %eax
+	movl %eax, (PAGE_DIRECTORY)
 
+	# identity map PT pages 1-511
+	movl $1, %ecx
+	movl $4096, %eax
+.PT_loop:
+	movl %eax, %edx
+	orl $0b11, %edx
+	
+	movl %edx, PAGE_TABLE(,%ecx, 8)
+
+	addl $4096, %eax
+	incl %ecx
+	cmpl $512, %ecx
+	jnz .PT_loop
+	
 	# Enable PAE
 	movl %cr4, %eax
 	orl $1 << 5, %eax	# CR4.PAE is bit 5
@@ -116,9 +130,10 @@ __KERNEL_GDT:
 .global PML4_TABLE
 .global PAGE_DIRECTORY_POINTER_TABLE
 .global PAGE_TABLE
-PML4_TABLE: .skip 4096
-PAGE_DIRECTORY_POINTER_TABLE: .skip 4096
-PAGE_DIRECTORY: .skip 4096
+PML4_TABLE:			.skip 4096
+PAGE_DIRECTORY_POINTER_TABLE:	.skip 4096
+PAGE_DIRECTORY:			.skip 4096
+PAGE_TABLE:			.skip 4096
 
 stack_bottom:
 	.skip 8192

@@ -1,4 +1,5 @@
 ////////	PLATFORM INCLUDES	////////
+#include "kernel/mem/bitmap.h"
 #include <multiboot2.h>
 #include <kernel/multiboot.h>
 #include <kernel/INT/IDT.h>
@@ -40,7 +41,7 @@ void kmain(uint32_t magic, struct multiboot_info_block* mbi) {
 		return;
         }
 
-        initialize_memBlockBank(tag_mmap);
+        initialize_PMM(tag_mmap);
         rbm_MultibootInfo.addr = mbi;
         rbm_MultibootInfo.size = mbi->total_size;
         rbm_Kernel.addr = (void*)KERNEL_BIN_START;
@@ -55,6 +56,9 @@ void kmain(uint32_t magic, struct multiboot_info_block* mbi) {
         printf("Reserved Sections:\n");
         printf("\tAddr: %p ; Size: %u bytes\n", rbm_Kernel.addr, rbm_Kernel.size);
         printf("\tAddr: %p ; Size: %u bytes\n", rbm_MultibootInfo.addr, rbm_MultibootInfo.size);
+        printf("\nDetected Usable Memory: %X bytes\n", pmmMap.size * 4 * 8 * 4096);
+        printf("Projected PMM Ledger Size: %X bytes\n", pmmMap.size * 4);
+        printf("\t(Ledger Start: %X)\n", pmmMap.data);
         ////////////////////////////////////////////
 	////////////////INTERRUPTS//////////////////
 	idt_init();
@@ -70,9 +74,11 @@ void kmain(uint32_t magic, struct multiboot_info_block* mbi) {
 	sti();
         ////////////////////////////////////////////
         ////////////////MEMORY//////////////////////
-        
+         
         ////////////////////////////////////////////
-	while (1) {
+        while (1) {
+		ksleep(INT64_MAX - sysclock);
+                printf("UNREACHABLE.");
 	}
 
 }
