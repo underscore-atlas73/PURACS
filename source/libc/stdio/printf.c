@@ -90,9 +90,23 @@ int printf(const char* restrict format, ...) {
 			if (!print(str, strlen(str)))
 				return -1;
 			written += strlen(str);
+		} else if (*format == 'b') {
+			format++;
+			const int n = va_arg(parameters, int);
+			if (maxrem < 12) {
+				// TODO: errno
+				return -1;
+			}
+
+			char str[ITOA_UBIN_MAXLEN];
+			itoa(n, str, 2, false);
+
+			if (!print(str,strlen(str)))
+				return -1;
+			written += strlen(str);
 		} else if (*format == 'p') {
 			format++;
-			const int64_t n = va_arg(parameters, int64_t);
+			const uintptr_t n = va_arg(parameters, uintptr_t);
 			if (maxrem < 12) {
 				// TODO: Set errno to EOVERFLOW.
 				return -1;
@@ -106,7 +120,7 @@ int printf(const char* restrict format, ...) {
 			written += strlen(str);
 		} else if (*format == 'u') {
 			format++;
-			const int64_t n = va_arg(parameters, int64_t);
+			const int n = va_arg(parameters, int);
 			if (maxrem < 12) {
 				// TODO: Set errno to EOVERFLOW.
 				return -1;

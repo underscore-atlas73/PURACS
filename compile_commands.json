@@ -410,5 +410,59 @@
     ],
     "directory": "/home/atlas/OS-DEV/SYS73/source",
     "file": "/home/atlas/OS-DEV/SYS73/source/kernel/INT/IDT.c"
+  },
+  {
+    "arguments": [
+      "/home/atlas/opt/cross/bin//x86_64-elf-gcc",
+      "-ffreestanding",
+      "-Wall",
+      "-Wextra",
+      "-mno-red-zone",
+      "-I",
+      "../build-sysroot/usr/include/",
+      "-D__is_libk",
+      "-c",
+      "-I",
+      "include/",
+      "./kernel/mem/bitmap.c"
+    ],
+    "directory": "/home/atlas/OS-DEV/SYS73/source",
+    "file": "/home/atlas/OS-DEV/SYS73/source/kernel/mem/bitmap.c"
+  },
+  {
+    "arguments": [
+      "/home/atlas/opt/cross/bin//x86_64-elf-gcc",
+      "-ffreestanding",
+      "-Wall",
+      "-Wextra",
+      "-mno-red-zone",
+      "-I",
+      "../build-sysroot/usr/include/",
+      "-D__is_libk",
+      "-c",
+      "-I",
+      "include/",
+      "./kernel/mem/pmm.c"
+    ],
+    "directory": "/home/atlas/OS-DEV/SYS73/source",
+    "file": "/home/atlas/OS-DEV/SYS73/source/kernel/mem/pmm.c"
+  },
+  {
+    "arguments": [
+      "/home/atlas/opt/cross/bin//x86_64-elf-gcc",
+      "-ffreestanding",
+      "-Wall",
+      "-Wextra",
+      "-mno-red-zone",
+      "-I",
+      "../build-sysroot/usr/include/",
+      "-D__is_libk",
+      "-c",
+      "-I",
+      "include/",
+      "./kernel/multiboot.c"
+    ],
+    "directory": "/home/atlas/OS-DEV/SYS73/source",
+    "file": "/home/atlas/OS-DEV/SYS73/source/kernel/multiboot.c"
   }
 ]
